@@ -1,0 +1,13 @@
+{
+  "name": "leadapp",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "concurrently -k \"pnpm --filter api start:dev\" \"pnpm --filter web dev\"",
+    "migrate": "pnpm --filter api db:migrate",
+    "test": "pnpm --filter api test"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  }
+}

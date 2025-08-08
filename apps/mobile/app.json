@@ -1,0 +1,20 @@
+{
+  "expo": {
+    "name": "LeadAppMobile",
+    "slug": "leadapp-mobile",
+    "version": "0.1.0",
+    "sdkVersion": "49.0.0",
+    "platforms": ["ios", "android"],
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": ["**/*"]
+  }
+}
