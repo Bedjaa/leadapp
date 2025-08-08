@@ -1,0 +1,103 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String?
+  businesses Business[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Business {
+  id             String   @id @default(uuid())
+  owner          User     @relation(fields: [ownerId], references: [id])
+  ownerId        String
+  name           String
+  fbPageId       String?
+  fbPageName     String?
+  fbAccessToken  String?
+  connected      Boolean  @default(false)
+  billingProfile BillingProfile?
+  qaFlows        QAFlow[]
+  mediaAssets    MediaAsset[]
+  campaigns      Campaign[]
+  payments       Payment[]
+  leads          Lead[]
+}
+
+model BillingProfile {
+  id              String   @id @default(uuid())
+  business        Business @relation(fields: [businessId], references: [id])
+  businessId      String   @unique
+  stripeCustomerId String?
+  stripeAccountId String?
+}
+
+model QAFlow {
+  id        String   @id @default(uuid())
+  business  Business @relation(fields: [businessId], references: [id])
+  businessId String
+  questions Json
+  answers   Json
+  script    String?
+  createdAt DateTime @default(now())
+}
+
+model MediaAsset {
+  id         String   @id @default(uuid())
+  business   Business @relation(fields: [businessId], references: [id])
+  businessId String
+  type       String
+  s3Key      String
+  fbVideoId  String?
+  createdAt  DateTime @default(now())
+}
+
+model Campaign {
+  id          String   @id @default(uuid())
+  business    Business @relation(fields: [businessId], references: [id])
+  businessId  String
+  name        String
+  objective   String
+  fbCampaignId   String?
+  fbAdSetId      String?
+  fbAdCreativeId String?
+  fbAdId         String?
+  fbLeadFormId   String?
+  status      String   @default("DRAFT")
+  plannedBudgetCents Int
+  createdAt   DateTime @default(now())
+}
+
+model Payment {
+  id          String   @id @default(uuid())
+  business    Business @relation(fields: [businessId], references: [id])
+  businessId  String
+  amountCents Int
+  feeCents    Int
+  adBudgetCents Int
+  stripePaymentId String?
+  status      String
+  createdAt   DateTime @default(now())
+}
+
+model Lead {
+  id          String   @id @default(uuid())
+  business    Business @relation(fields: [businessId], references: [id])
+  businessId  String
+  fbLeadId    String   @unique
+  fullName    String?
+  email       String?
+  phone       String?
+  answers     Json?
+  status      String   @default("NEW")
+  createdAt   DateTime @default(now())
+}
